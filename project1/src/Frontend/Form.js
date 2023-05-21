@@ -4,7 +4,8 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
-import { getApi } from "../API/Register";
+import axios from "axios";
+// import { getApi } from "../API/Register";
 
 const Form = () => {
   const[data,setData]=useState('');
@@ -22,18 +23,25 @@ const handlechange=(e)=>{
      console.log(register,"adfg")
    
 }
+const values = {
+  name: register.name,
+  email: register.email,
+  password: register.password,
+};
 
-const handlesubmit=async(e)=>{
-  const payload = {
-    name: register.name,
-    email: register.email,
-    password: register.password,
-  };
-  await getApi(payload).then((res) => {
+const handlesubmit = async (e) => {
+  await axios.post("http://localhost:5000/api", values).then((res) => {
     setData(res);
-    console.log("succesfully inserted");
+     setRegister({
+      name:'',
+      email:'',
+      password:''
+     })
+    console.log(res);
   });
-}
+};
+
+
 
   // const fetchapidata=async()=>{
   //   const payload = {
@@ -84,6 +92,14 @@ const handlesubmit=async(e)=>{
         <Button type="submit" variant="contained" onClick={handlesubmit}>
           SUBMIT
         </Button>
+        {data && (
+          <>
+        <p>Successfully Resgistered .please Login</p>
+        <Button >
+          LOGIN
+        </Button>
+        </>
+        )}
       </Stack>
     </Box>
   );
