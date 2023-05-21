@@ -8,27 +8,80 @@ import { getApi } from "../API/Register";
 
 const Form = () => {
   const[data,setData]=useState('');
+  const [register, setRegister] = useState({
+    name:'',
+    email:'',
+    password:'',
+  })
+  
+const handlechange=(e)=>{
+     setRegister({
+      ...register,
+      [e.target.name]:e.target.value
+     });
+     console.log(register,"adfg")
+   
+}
 
-  const fetchapidata=async()=>{
-   await getApi().then((res) => {
-     setData(res);        //you dont have to add data it will give error, as response from api already stored 
-    // in data in backend. if you want to add res.data then in backend you should remove it
-   });
-  }
+const handlesubmit=async(e)=>{
+  const payload = {
+    name: register.name,
+    email: register.email,
+    password: register.password,
+  };
+  await getApi(payload).then((res) => {
+    setData(res);
+    console.log("succesfully inserted");
+  });
+}
 
-  useEffect(()=>{
-      fetchapidata();
-  },[])
+  // const fetchapidata=async()=>{
+  //   const payload = {
+  //     name: register.name,
+  //     email: register.email,
+  //     password: register.password,
+  //   };
+  //  await getApi(payload).then((res) => {
+  //    setData(res); //you dont have to add data it will give error, as response from api already stored
+  //    // in data in backend. if you want to add res.data then in backend you should remove it
+  //  console.log(res);
+  //   });
+  // }
+
+  // useEffect(()=>{
+  //     fetchapidata();
+  // },[])
+
+  
   return (
     <Box sx={{ margin: "30px 196px", padding: "47px" }}>
-        <Typography>REGISTER FORM</Typography>
-        {/* {data.message} */}
-        {data.message}
+      <Typography>REGISTER FORM</Typography>
       <Stack direction="column" spacing={2}>
-        <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-        <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-        <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-        <Button type="submit" variant="contained">
+        <TextField
+          id="outlined-basic"
+          name="name"
+          value={register.name}
+          onChange={handlechange}
+          label="Outlined"
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-basic"
+          name="email"
+          value={register.email}
+          label="Outlined"
+          variant="outlined"
+          onChange={handlechange}
+        />
+        <TextField
+          id="outlined-basic"
+          name="password"
+          value={register.password}
+          label="Outlined"
+          variant="outlined"
+          onChange={handlechange}
+        />
+        <Button type="submit" variant="contained" onClick={handlesubmit}>
           SUBMIT
         </Button>
       </Stack>

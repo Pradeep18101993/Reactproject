@@ -1,7 +1,7 @@
 import modem from "../modem";
 
 export const getApi = async () => {
-  const newPro = modem.get('/api').then((res) => {
+  const newPro = modem.post('/api').then((res) => {
     return res.data;
   });
 
