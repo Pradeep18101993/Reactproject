@@ -4,8 +4,9 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
-import axios from "axios";
-// import { getApi } from "../API/Register";
+import { Link } from "react-router-dom"; 
+// import axios from "axios";
+import { getApi } from "../API/Register";
 
 const Form = () => {
   const[data,setData]=useState('');
@@ -29,17 +30,25 @@ const values = {
   password: register.password,
 };
 
-const handlesubmit = async (e) => {
-  await axios.post("http://localhost:5000/api", values).then((res) => {
+// const handlesubmit = async (e) => {
+//   await axios.post("http://localhost:5000/api", values).then((res) => {
+//     setData(res);
+//      setRegister({
+//       name:'',
+//       email:'',
+//       password:''
+//      })
+//     console.log(res);
+//   });
+// };
+
+const handlesubmit=async(e)=>{
+  e.preventDefault();
+  await getApi(values).then((res) => {
     setData(res);
-     setRegister({
-      name:'',
-      email:'',
-      password:''
-     })
-    console.log(res);
+    console.log(data, "reg");
   });
-};
+}
 
 
 
@@ -94,11 +103,11 @@ const handlesubmit = async (e) => {
         </Button>
         {data && (
           <>
-        <p>Successfully Resgistered .please Login</p>
-        <Button >
-          LOGIN
-        </Button>
-        </>
+            <p>Successfully Resgistered .please Login</p>
+            <Link to="/login">
+              <Button>LOGIN</Button>
+            </Link>
+          </>
         )}
       </Stack>
     </Box>
