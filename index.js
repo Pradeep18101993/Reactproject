@@ -18,7 +18,7 @@ app.post('/api',(req,res)=>{
   const email=req.body.email;
   const password=req.body.password;
    db.query(
-     "INSERT INTO name (name,email,password) VALUES(?,?,?)",
+     "INSERT INTO reg (name,email,password) VALUES(?,?,?)",
      [name, email, password],
      (err, result) => {
        if (result) {
@@ -28,6 +28,22 @@ app.post('/api',(req,res)=>{
        }
      }
    );
+})
+
+app.post('/login',(req,res)=>{
+  const name=req.body.name;
+  const email=req.body.email;
+
+  const select="SELECT * FROM reg WHERE name=? AND email=?";
+  db.query(select,[name,email],(err,result)=>{
+    if(result.length>0)
+    {
+      res.send(result);
+    }
+    else{
+      res.send({err:err});
+    }
+  })
 })
 
 app.listen(5000,()=>{
