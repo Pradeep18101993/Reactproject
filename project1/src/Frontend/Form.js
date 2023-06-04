@@ -105,7 +105,7 @@ const handlesubmit=async(e)=>{
           <>
             <p>Successfully Resgistered .please Login</p>
             <Link to="/login">
-              <Button>LOGIN</Button>
+              <Button>GO TO LOGIN</Button>
             </Link>
           </>
         )}

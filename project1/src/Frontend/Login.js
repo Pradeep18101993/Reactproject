@@ -1,9 +1,10 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { getlogin } from "../API/Register";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState("");
   const [login, setLogin] = useState({
     email: "",
@@ -22,12 +23,51 @@ const Login = () => {
     name: login.name,
     email: login.email,
   };
+ 
+
+  // -------other way of navigation with try and catch block-----------------//
+
+  // const handlelogin = async (e) => {
+  //   try{
+
+  //     const response=await getlogin(values);
+  //       if (response) {
+  //         navigate('/home');   
+  //         
+  //         // history.push('/home');--------->old not working
+  //         setData(res.data[0].name)
+  //         // window.location.href = "/home";-------->working only on console
+  //       }
+  //       else{
+  //         console.log('error occured');
+  //       }
+  //       console.log(response, "log");
+  //     ;
+  //   }
+  //   catch(error){
+  //      console.log('error occured',error);
+
+  //   }
+  // };
+
   const handlelogin = async (e) => {
-    await getlogin(values).then((res) => {
-      if (res.data) {
-        setData(res.data[0].name);
+    
+      await getlogin(values)
+      .then((res)=>{
+        if (res) {
+        navigate("/home");
+        // history.push('/home');--------->old not working
+        // window.location.href = "/home";-------->working only on console
+      } else {
+        console.log("error occured");
       }
       console.log(res, "log");
+    })
+     
+    .catch(error => {
+      // Handle API error
+      console.error("An error occurred:", error);
+      // Perform additional error handling or display an error message to the user
     });
   };
 
@@ -51,9 +91,9 @@ const Login = () => {
           variant="outlined"
           onChange={handlechange}
         />
-        <Link to="/login">
+        
           <Button onClick={handlelogin}>LOGIN</Button>
-        </Link>
+        
       </Stack>
     </Box>
   );
