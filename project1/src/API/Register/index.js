@@ -1,8 +1,8 @@
 import modem from "../modem";
 
-//data is callback from front end and it recieves all the payload 
+//data is callback from front end and it recieves all the payload
 export const getApi = async (data) => {
-  const newPro = modem.post('/api',data).then((res) => {
+  const newPro = modem.post("/api", data).then((res) => {
     return res.data;
   });
 
@@ -10,9 +10,17 @@ export const getApi = async (data) => {
 };
 
 export const getlogin = async (data) => {
-  const newPro = modem.post("/login", data).then((res) => {
-    return res.data;
-  });
+  try {
+    const response = await modem.post("/login", data);
+    console.log(response, "response");
+    const token = response.data.token;
 
-  return newPro;
+    // Set the token in localStorage after a successful login
+    localStorage.setItem("accessToken", token);
+
+    return response.data;
+  } catch (error) {
+    console.error("Login error:", error);
+    throw error;
+  }
 };

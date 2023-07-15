@@ -23,7 +23,6 @@ const Login = () => {
     name: login.name,
     email: login.email,
   };
- 
 
   // -------other way of navigation with try and catch block-----------------//
 
@@ -32,8 +31,8 @@ const Login = () => {
 
   //     const response=await getlogin(values);
   //       if (response) {
-  //         navigate('/home');   
-  //         
+  //         navigate('/home');
+  //
   //         // history.push('/home');--------->old not working
   //         setData(res.data[0].name)
   //         // window.location.href = "/home";-------->working only on console
@@ -51,24 +50,21 @@ const Login = () => {
   // };
 
   const handlelogin = async (e) => {
-    
-      await getlogin(values)
-      .then((res)=>{
-        if (res) {
-        navigate("/home");
-        // history.push('/home');--------->old not working
-        // window.location.href = "/home";-------->working only on console
+    try {
+      const res = await getlogin(values);
+
+      if (res && res.token) {
+        // Check if the token is present in the response
+        setData(res);
+        navigate("/home"); // Navigate to the home page or your desired destination after login
       } else {
-        console.log("error occured");
+        console.log("Error occurred during login");
       }
-      console.log(res, "log");
-    })
-     
-    .catch(error => {
+    } catch (error) {
       // Handle API error
       console.error("An error occurred:", error);
       // Perform additional error handling or display an error message to the user
-    });
+    }
   };
 
   return (
@@ -91,9 +87,8 @@ const Login = () => {
           variant="outlined"
           onChange={handlechange}
         />
-        
-          <Button onClick={handlelogin}>LOGIN</Button>
-        
+
+        <Button onClick={handlelogin}>LOGIN</Button>
       </Stack>
     </Box>
   );
