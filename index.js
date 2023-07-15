@@ -17,17 +17,14 @@ app.post('/api',(req,res)=>{
   const name=req.body.name;
   const email=req.body.email;
   const password=req.body.password;
-   db.query(
-     "INSERT INTO reg (name,email,password) VALUES(?,?,?)",
-     [name, email, password],
-     (err, result) => {
-       if (result) {
-         res.send(result);
-       } else {
-         res.send({ err: err });
-       }
+  sqlvalue= "INSERT INTO reg (name,email,password) VALUES(?,?,?)"
+   db.query(sqlvalue, [name, email, password], (err, result) => {
+     if (result) {
+       res.send(result);
+     } else {
+       res.send({ err: err });
      }
-   );
+   });
 })
 
 app.post('/login',(req,res)=>{
