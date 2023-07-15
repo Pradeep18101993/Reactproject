@@ -104,11 +104,11 @@ const handlesubmit=async(e)=>{
         {data && (
           <>
             <p>Successfully Resgistered .please Login</p>
-            <Link to="/login">
-              <Button>GO TO LOGIN</Button>
-            </Link>
           </>
         )}
+        <Link to="/login">
+          <Button variant="contained">GO TO LOGIN</Button>
+        </Link>
       </Stack>
     </Box>
   );
