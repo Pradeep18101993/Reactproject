@@ -12,7 +12,7 @@ export const getApi = async (data) => {
 export const getlogin = async (data) => {
   try {
     const response = await modem.post("/login", data);
-    console.log(response, "response");
+    // console.log(response, "response");
     const token = response.data.token;
 
     // Set the token in localStorage after a successful login
@@ -22,5 +22,20 @@ export const getlogin = async (data) => {
   } catch (error) {
     console.error("Login error:", error);
     throw error;
+  }
+};
+
+export const homepage = async (token) => {
+  try {
+    const response = await modem.get("/home", {
+      headers: {
+        Authorization: token,
+      },
+    });
+    console.log(response, "response of api");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null; // or you can return an error message or handle the error as needed
   }
 };

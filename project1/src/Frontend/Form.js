@@ -4,53 +4,57 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 // import axios from "axios";
 import { getApi } from "../API/Register";
 
 const Form = () => {
-  const[data,setData]=useState('');
+  const [data, setData] = useState({});
   const [register, setRegister] = useState({
-    name:'',
-    email:'',
-    password:'',
-  })
-  
-const handlechange=(e)=>{
-     setRegister({
-      ...register,
-      [e.target.name]:e.target.value
-     });
-     console.log(register,"adfg")
-   
-}
-const values = {
-  name: register.name,
-  email: register.email,
-  password: register.password,
-};
-
-// const handlesubmit = async (e) => {
-//   await axios.post("http://localhost:5000/api", values).then((res) => {
-//     setData(res);
-//      setRegister({
-//       name:'',
-//       email:'',
-//       password:''
-//      })
-//     console.log(res);
-//   });
-// };
-
-const handlesubmit=async(e)=>{
-  e.preventDefault();
-  await getApi(values).then((res) => {
-    setData(res);
-    console.log(data, "reg");
+    name: "",
+    email: "",
+    password: "",
   });
-}
+  const [successmessage, setSuccessmessage] = useState("");
 
+  const handlechange = (e) => {
+    setRegister({
+      ...register,
+      [e.target.name]: e.target.value,
+    });
+    console.log(register, "adfg");
+  };
+  const values = {
+    name: register.name,
+    email: register.email,
+    password: register.password,
+  };
 
+  // const handlesubmit = async (e) => {
+  //   await axios.post("http://localhost:5000/api", values).then((res) => {
+  //     setData(res);
+  //      setRegister({
+  //       name:'',
+  //       email:'',
+  //       password:''
+  //      })
+  //     console.log(res);
+  //   });
+  // };
+
+  const handlesubmit = async (e) => {
+    e.preventDefault();
+    await getApi(values).then((res) => {
+      setData(res);
+      setSuccessmessage("SUCCESSFULLY REGISTERED");
+      setRegister({
+        name: "",
+        email: "",
+        password: "",
+      });
+      console.log(data, "reg");
+    });
+  };
 
   // const fetchapidata=async()=>{
   //   const payload = {
@@ -69,7 +73,6 @@ const handlesubmit=async(e)=>{
   //     fetchapidata();
   // },[])
 
-  
   return (
     <Box sx={{ margin: "30px 196px", padding: "47px" }}>
       <Typography>REGISTER FORM</Typography>
@@ -98,18 +101,15 @@ const handlesubmit=async(e)=>{
           variant="outlined"
           onChange={handlechange}
         />
-        <Button type="submit" variant="contained" onClick={handlesubmit}>
-          SUBMIT
-        </Button>
-        {data && (
-          <>
-            <p>Successfully Resgistered .please Login</p>
-            <Link to="/login">
-              <Button>GO TO LOGIN</Button>
-            </Link>
-          </>
-        )}
       </Stack>
+      <Button type="submit" variant="contained" onClick={handlesubmit}>
+        SUBMIT
+      </Button>
+      <p>{successmessage}</p>
+      <p>OR</p>
+      <Link to="/login">
+        <Button variant="contained">GO TO LOGIN</Button>
+      </Link>
     </Box>
   );
 };

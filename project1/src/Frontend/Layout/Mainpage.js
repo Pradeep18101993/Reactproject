@@ -1,8 +1,12 @@
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getlogout } from "../../API/Register/index1";
-
+import { homepage } from "../../API/Register/index";
+import { useNavigate } from "react-router-dom";
 const Mainpage = () => {
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+
   const handlelogout = async () => {
     try {
       // Get the JWT token from localStorage
@@ -19,17 +23,37 @@ const Mainpage = () => {
       // Remove the JWT token from localStorage
       localStorage.removeItem("accessToken");
 
-      // Redirect the user to the login page or perform any other action after logout.
-      // For example, you can use a frontend router to navigate to the login page:
-      window.location.href = "/"; // Replace '/login' with your login page route
+      window.location.href = "/";
     } catch (error) {
-      // Handle any errors that may occur during logout
       console.error("Logout error:", error);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      navigate("/login");
+    } else {
+      // Function to fetch data from the protected homepage API
+      const fetchData = async (token) => {
+        try {
+          // Make the API request to the protected homepage route using the homepage function
+          const response = await homepage(token);
+          setMessage(response);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchData(token);
+    }
+  }, []);
+
   return (
     <div>
       Mainpage
+      <p>{message}</p>
       <Button onClick={handlelogout}>Logout</Button>
     </div>
   );

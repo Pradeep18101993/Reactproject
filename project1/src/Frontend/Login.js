@@ -87,9 +87,14 @@ const Login = () => {
           variant="outlined"
           onChange={handlechange}
         />
-
-        <Button onClick={handlelogin}>LOGIN</Button>
       </Stack>
+      <Button variant="contained" onClick={handlelogin}>
+        LOGIN
+      </Button>
+      <p>OR</p>
+      <Link to="/">
+        <Button variant="contained">REGISTER</Button>
+      </Link>
     </Box>
   );
 };
