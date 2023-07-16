@@ -14,6 +14,24 @@ const db = mysql.createConnection({
   database: "register",
 });
 
+function verifyToken(req, res, next) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+
+    // If the token is valid, attach the decoded token to the request object
+    req.user = decodedToken;
+    next(); // Call the next middleware or route handler
+  });
+}
+
 //posting all the registered information of user to database and sending the result to frontend
 app.post("/api", (req, res) => {
   const name = req.body.name; //will recieve name from frontend body
@@ -41,6 +59,10 @@ app.post("/login", (req, res) => {
 
   const select = "SELECT * FROM reg WHERE name=? AND email=?";
   db.query(select, [name, email], (err, result) => {
+    if (result.length === 0) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
     if (result.length > 0) {
       const token = jwt.sign(
         { id: result[0].id, name: result[0].name, email: result[0].email },
@@ -54,6 +76,15 @@ app.post("/login", (req, res) => {
       res.send({ err: err });
     }
   });
+});
+
+app.get("/home", verifyToken, (req, res) => {
+  //verifytoken will check the token and if everything perfect sends message to the frontend.
+  //in the frontend call api which makes use of token from headers authorization of body ,that
+  //token will be sent back to backend to the verification ,and after verification welcome messsage
+  //frontend will recieve
+  res.setHeader("Cache-Control", "no-cache");
+  res.send("Welcome to the homepage!"); // Replace this with your actual homepage content
 });
 
 app.post("/logout", (req, res) => {
